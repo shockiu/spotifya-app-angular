@@ -1,0 +1,11 @@
+<div class="card-columns m-5 puntero">
+    <div class="card" *ngFor="let item of items" (click)="lookArtist( item )">
+      <img [src]="item.images | imagenotfound" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.name }}</h5>
+        <p class="card-text" *ngFor="let artists of item.artists">
+            {{ artists.name }}
+        </p>
+      </div>
+    </div>
+</div>

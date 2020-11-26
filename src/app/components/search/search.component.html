@@ -1,0 +1,12 @@
+<div class="col">
+    <div class="row">
+        <input type="text" 
+            class="form-control" 
+            placeholder="Escribe un artista" 
+            (keyup)="searchArtist($event)">
+    </div>
+</div>
+
+<app-loading *ngIf="loading" class="m-5"></app-loading>
+
+<app-cards [items]="data"></app-cards>

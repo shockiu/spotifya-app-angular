@@ -1,0 +1,8 @@
+<app-loading *ngIf="loading"></app-loading>
+
+<div class="alert alert-danger animated fadeIn" *ngIf="err">
+    <h4> Error </h4>
+    <p> {{ messageError }} </p>
+</div>
+
+<app-cards [items]="data" class="animated fadeIn"></app-cards>
