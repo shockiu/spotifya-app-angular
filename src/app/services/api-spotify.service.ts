@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment.prod';
 import { Observable } from 'rxjs';
 import { SpotifyData, Item, SpotifyDataArtists } from '../interfaces/spotify-data';
+import { TokenRequest } from '../interfaces/token-bearer';
 
 import { map } from 'rxjs/operators';
 
@@ -10,16 +12,25 @@ import { map } from 'rxjs/operators';
 })
 export class ApiSpotifyService {
 
+  public tokenBearer: string = '';
+
   constructor( private http: HttpClient ) {
   }
   
+  getTokenBearer(): Observable<string> {
+    const URL: string = `${environment.urlAccountSpotify}${environment.client_id}/${environment.client_secret}`; 
+    return this.http.get<TokenRequest>(URL).pipe(
+      map((res: TokenRequest) => res.access_token )
+    );
+  }
+
   getQuerySpotify(query: string){
 
-    const URL = `https://api.spotify.com/v1/${query}`;
+    const URL = `${environment.urlSpotify}${query}`;
     const HEADERS = new HttpHeaders({
-      'Authorization' : 'Bearer BQD4ArTVUkK9AhzEDDfKaBey47LDGczobSS6HWed6CCq8YBM11ukm_Fh5IR9Z73WG47EoZpK0Momehk9gTE'
+      'Authorization' : `Bearer ${this.tokenBearer}`
     });
-    
+    console.log(HEADERS)
     return this.http.get(URL, { headers: HEADERS });
   }
 

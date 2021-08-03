@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiSpotifyService } from '../../services/api-spotify.service';
 import { SpotifyData, Albums, Item } from '../../interfaces/spotify-data';
+import { concat } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -16,20 +17,31 @@ export class HomeComponent implements OnInit {
   messageError: string;
 
   constructor( private spotify: ApiSpotifyService ) {
-    this.err = false;
-    this.spotify.getNewRealeses().subscribe((res) => {
-      this.data = res;
-      this.loading = false; 
+    this.spotify.getTokenBearer()
+    .subscribe(res => {
+        console.log(res);
+        this.spotify.tokenBearer = res;
     }, (err) => {
-      this.err = true;
-      console.log(err);
-      this.messageError = err;
-    });
-   
+      console.error(err);
+    }, () => {
+      this.getNewRealeses();
+    });   
   }
 
   ngOnInit(){
    
+  }
+
+  getNewRealeses() {
+    this.err = false;
+    this.spotify.getNewRealeses().subscribe(res => {
+      this.data = res;
+      this.loading = false;
+    }, (err) => {
+      this.err = true;
+      console.log(err);
+      this.messageError = err;
+    })
   }
 
 }
